@@ -1,10 +1,10 @@
 {
-  "name": "mcp-weather",
-  "version": "1.0.0",
-  "description": "MCP Weather Service",
+  "name": "@rehmatalisayany/weather-mcp-server",
+  "version": "1.0.1",
+  "description": "MCP Weather Service - A Model Context Protocol server for weather data",
   "main": "src/index.ts",
   "bin": {
-    "mcp-weather": "./src/index.ts"
+    "weather-mcp-server": "./src/index.ts"
   },
   "type": "module",
   "scripts": {
@@ -12,6 +12,24 @@
     "dev": "npx tsx watch src/index.ts",
     "test": "npx tsx src/test-client.ts"
   },
+  "keywords": [
+    "mcp",
+    "weather",
+    "cursor",
+    "model-context-protocol",
+    "weather-api",
+    "open-meteo"
+  ],
+  "author": "rehmatalisayany",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rehmat123/weather-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rehmat123/weather-mcp-server/issues"
+  },
+  "homepage": "https://github.com/rehmat123/weather-mcp-server#readme",
+  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1",
     "@types/node": "^20.0.0",
