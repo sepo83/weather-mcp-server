@@ -1,29 +1,26 @@
-# MCP Weather Service
+# Weather MCP Server
 
-A Model Context Protocol (MCP) server that provides weather data through a simple tool interface. This service uses the Open-Meteo API to provide real-time weather information without requiring any API keys.
+A Model Context Protocol (MCP) server for fetching weather data using the Open-Meteo API. This server can be integrated with Cursor IDE to provide weather information through the MCP protocol.
 
-## Installation
+## Usage
+
+### As a CLI Tool
 
 ```bash
-# Global installation
-npm install -g @rehmatalisayany/weather-mcp-server
-
-# Or use directly with npx (recommended)
 npx @rehmatalisayany/weather-mcp-server
 ```
 
-## Quick Start
+### In Cursor IDE
 
-### 1. Add to Cursor MCP
+Add the following configuration to your `cursor.json`:
+![alt text](image.png)
 
-Add this to your `cursor.json`:
 ```json
 {
   "mcp": {
     "servers": {
       "weather": {
-        "command": "npx",
-        "args": ["@rehmatalisayany/weather-mcp-server"],
+        "command": "@rehmatalisayany/weather-mcp-server",
         "transport": "stdio"
       }
     }
@@ -31,214 +28,51 @@ Add this to your `cursor.json`:
 }
 ```
 
-### 2. Use in Your Code
+### In your AI Agent
 
-```typescript
-// In your Cursor editor
-const weather = await cursor.mcp.callTool("weather/getWeather", {
-  location: "London"
-});
+check get-weather.ts for source code
 
-// Example response:
-{
-  "temperature": 12.5,      // Temperature in Celsius
-  "humidity": 76,           // Humidity percentage
-  "description": "Cloudy",  // Human-readable weather description
-  "windSpeed": 4.2         // Wind speed in meters per second
-}
+### To connect with Local MCP Server first you need to install 
+
+### Installation
+
+```bash
+npm install @rehmatalisayany/weather-mcp-server
 ```
 
-## Using in AI Agents
-
-### Basic Setup
-
-```typescript
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-
-class WeatherAgent {
-  private mcpClient: Client;
-  private lastLocation: string | null = null;
-
-  constructor() {
-    this.mcpClient = new Client({
-      name: 'weather-agent',
-      version: '1.0.0'
-    });
-  }
-
-  async connect() {
-    // Using the npm package
-    const transport = new StdioClientTransport({
-      command: 'npx',
-      args: ['@rehmatalisayany/weather-mcp-server']
-    });
-    await this.mcpClient.connect(transport);
-  }
-
-  async getWeather(location: string): Promise<string> {
-    try {
-      const result = await this.mcpClient.callTool({
-        name: 'getWeather',
-        arguments: { location }
-      });
-
-      if (result?.content?.[0]?.text) {
-        const weather = JSON.parse(result.content[0].text);
-        return this.formatWeatherResponse(location, weather);
-      }
-      return `Sorry, I couldn't find weather information for ${location}.`;
-    } catch (error) {
-      console.error('Error:', error);
-      return "Sorry, there was an error getting the weather information.";
-    }
-  }
-
-  private formatWeatherResponse(location: string, weather: any): string {
-    return `Current weather in ${location}:
-• Temperature: ${weather.temperature}°C
-• Conditions: ${weather.description}
-• Humidity: ${weather.humidity}%
-• Wind Speed: ${weather.windSpeed} m/s`;
-  }
-}
+### Compile
+```bash
+npm build
 ```
 
-### Example Usage
-
-```typescript
-// Initialize and connect
-const agent = new WeatherAgent();
-await agent.connect();
-
-// Get weather
-const response = await agent.getWeather("London");
-console.log(response);
-
-// Example output:
-// Current weather in London:
-// • Temperature: 12.5°C
-// • Conditions: Cloudy
-// • Humidity: 76%
-// • Wind Speed: 4.2 m/s
+### Code usage in your Agent
+ ```
+   const transport = new StdioClientTransport({
+     command: 'node',
+     args: ['dist/index.js']
+   });
 ```
 
-### Advanced Implementation
-
-Here's a more complete agent implementation with message handling and context retention:
-
-```typescript
-class AdvancedWeatherAgent {
-  private mcpClient: Client;
-  private lastLocation: string | null = null;
-
-  constructor() {
-    this.mcpClient = new Client({
-      name: 'weather-agent',
-      version: '1.0.0'
-    });
-  }
-
-  async connect() {
-    const transport = new StdioClientTransport({
-      command: 'npx',
-      args: ['@rehmatalisayany/weather-mcp-server']
-    });
-    await this.mcpClient.connect(transport);
-  }
-
-  async handleMessage(message: string): Promise<string> {
-    // Handle weather queries
-    if (message.toLowerCase().includes('weather')) {
-      const location = this.extractLocation(message) || this.lastLocation;
-      if (!location) {
-        return "Which city would you like to know the weather for?";
-      }
-      
-      this.lastLocation = location;
-      return await this.getWeatherResponse(location);
-    }
-    
-    // Handle follow-up questions
-    if (this.lastLocation && message.toLowerCase().includes('how about tomorrow')) {
-      return "I can only provide current weather information.";
-    }
-    
-    return "I can help you check the weather. Just ask about any city!";
-  }
-
-  private async getWeatherResponse(location: string): Promise<string> {
-    try {
-      const result = await this.mcpClient.callTool({
-        name: 'getWeather',
-        arguments: { location }
-      });
-
-      if (result?.content?.[0]?.text) {
-        const weather = JSON.parse(result.content[0].text);
-        return this.formatWeatherResponse(location, weather);
-      }
-      return `Sorry, I couldn't find weather information for ${location}.`;
-    } catch (error) {
-      console.error('Error:', error);
-      return "Sorry, there was an error getting the weather information.";
-    }
-  }
-
-  private formatWeatherResponse(location: string, weather: any): string {
-    return `Current weather in ${location}:
-• Temperature: ${weather.temperature}°C
-• Conditions: ${weather.description}
-• Humidity: ${weather.humidity}%
-• Wind Speed: ${weather.windSpeed} m/s`;
-  }
-
-  private extractLocation(message: string): string | null {
-    const words = message.split(' ');
-    const inIndex = words.indexOf('in');
-    if (inIndex !== -1 && inIndex < words.length - 1) {
-      return words[inIndex + 1];
-    }
-    return null;
-  }
-}
-
-// Usage example:
-const agent = new AdvancedWeatherAgent();
-await agent.connect();
-
-// Handle various queries
-console.log(await agent.handleMessage("What's the weather in Tokyo?"));
-console.log(await agent.handleMessage("How about tomorrow?")); // Uses context
-console.log(await agent.handleMessage("What's the weather?")); // Uses last location
+### To connect with Remote MCP Server use this directly, you dont need to install and compile
 ```
+  const transport = new StdioClientTransport({
+    command: 'npx',
+    args: ['@rehmatalisayany/weather-mcp-server']
+  });
 
-## Features
+```
+## API
 
-- Real-time weather data using Open-Meteo API (free, no API key required)
-- Temperature in Celsius
-- Humidity percentage
-- Wind speed in m/s
-- Detailed weather descriptions
-- Error handling
-- Context retention for follow-up questions
+The server provides the following tool:
 
-## Weather Descriptions
-
-Available weather descriptions include:
-- Clear sky
-- Mainly clear
-- Partly cloudy
-- Overcast
-- Foggy
-- Light/Moderate/Dense drizzle
-- Rain (various intensities)
-- Snow (various intensities)
-- Thunderstorms
-
-## NPM Package
-
-This package is available on npm as [@rehmatalisayany/weather-mcp-server](https://www.npmjs.com/package/@rehmatalisayany/weather-mcp-server).
+- `getWeather`: Get current weather for a location
+  - Arguments:
+    - `location`: String (city name or location)
+  - Returns:
+    - `temperature`: Current temperature in Celsius
+    - `conditions`: Weather conditions description
+    - `humidity`: Humidity percentage
+    - `windSpeed`: Wind speed in m/s
 
 ## License
 
