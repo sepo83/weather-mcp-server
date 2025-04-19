@@ -28,9 +28,11 @@ Add the following configuration to your `cursor.json`:
 }
 ```
 
-### In your AI Agent
+### Test using MCP Client
 
-check get-weather.ts for source code
+check get-weather.ts for source code, you can run this file to connect to MCP Server
+
+![alt text](image-1.png)
 
 ### To connect with Local MCP Server first you need to install 
 
