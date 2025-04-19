@@ -37,11 +37,13 @@ check get-weather.ts for source code
 ### Installation
 
 ```bash
-npm install @rehmatalisayany/weather-mcp-server
+git clone https://github.com/rehmat123/weather-mcp-server.git
 ```
 
-### Compile
+go to directory and than
+### Install dependencies and build
 ```bash
+npm i
 npm build
 ```
 
@@ -53,7 +55,7 @@ npm build
    });
 ```
 
-### To connect with Remote MCP Server use this directly, you dont need to install and compile
+### To connect with Remote MCP Server use this, you dont need to install and compile
 ```
   const transport = new StdioClientTransport({
     command: 'npx',
