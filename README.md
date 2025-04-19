@@ -4,10 +4,10 @@ A Model Context Protocol (MCP) server for fetching weather data using the Open-M
 
 ## Usage
 
-### As a CLI Tool
+### As a Langchain Agent
 
 ```bash
-npx @rehmatalisayany/weather-mcp-server
+https://github.com/rehmat123/Langchain-typescript/blob/main/src/langchain/weather.ts
 ```
 
 ### In Cursor IDE
