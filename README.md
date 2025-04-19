@@ -1,4 +1,4 @@
-# Weather MCP Server
+# Weather MCP Server in TypeScript
 
 A Model Context Protocol (MCP) server for fetching weather data using the Open-Meteo API. This server can be integrated with Cursor IDE to provide weather information through the MCP protocol.
 
