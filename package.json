@@ -1,7 +1,7 @@
 {
   "name": "@rehmatalisayany/weather-mcp-server",
-  "version": "1.0.4",
-  "description": "MCP Weather Service - A Model Context Protocol server for weather data",
+  "version": "1.0.6",
+  "description": "MCP Weather Service - A MCP server for weather data using Open Meteo API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -28,7 +28,7 @@
     "weather-api",
     "open-meteo"
   ],
-  "author": "rehmatalisayany",
+  "author": "Rehmat Ali Sayany",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rehmat123/weather-mcp-server.git"

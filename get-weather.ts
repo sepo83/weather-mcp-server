@@ -24,15 +24,15 @@ async function getWeather() {
     console.log('Connected successfully!\n');
 
     // Get weather for Lahore
-    console.log('Getting weather for Lahore...');
+    console.log('Getting weather for Munich...');
     const result = await client.callTool({
       name: 'getWeather',
-      arguments: { location: 'Lahore' }
+      arguments: { location: 'Munich' }
     });
 
     if (result?.content?.[0]?.text) {
       const weather = JSON.parse(result.content[0].text);
-      console.log('\nCurrent weather in Lahore:');
+      console.log('\nCurrent weather in Munich:');
       console.log(`• Temperature: ${weather.temperature}°C`);
       console.log(`• Conditions: ${weather.description}`);
       console.log(`• Humidity: ${weather.humidity}%`);
