@@ -103,9 +103,11 @@ async function main() {
       const dateStr = date;
 
       // 3. Wetterdaten holen
-      const weatherResponse = await fetch(
-        `${WEATHER_API_URL}?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&start_date=${dateStr}&end_date=${dateStr}&timezone=auto`
-      );
+      const weatherApiUrl = `${WEATHER_API_URL}?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&start_date=${dateStr}&end_date=${dateStr}&timezone=auto`;
+      console.log("Wetter-API Aufruf:", weatherApiUrl);
+
+      const weatherResponse = await fetch(weatherApiUrl);
+
       if (!weatherResponse.ok) {
         return {
           content: [{ type: "text", text: `Weather API error: ${weatherResponse.statusText}` }]
