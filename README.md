@@ -1,6 +1,6 @@
 # Weather MCP Server in TypeScript
 
-A Model Context Protocol (MCP) server for fetching weather data using the Open-Meteo API. This server can be integrated with Cursor IDE to provide weather information through the MCP protocol.
+A Model Context Protocol (MCP) server for fetching weather data using the Open-Meteo API. This server can be integrated with supergateway in oder to deliver a sse (Server Sent Events) interface (see Dockerfile), e.g. for usage with Home Assistant (see MCP https://www.home-assistant.io/integrations/mcp/)
 
 ## Usage
 
@@ -65,18 +65,27 @@ npm build
   });
 
 ```
+### To run with Docker providing SSE interface
+```
+  docker build . -t weather-mcp-server
+  docker run -p 8000:8000 weather-mcp-server
+```
+
 ## API
 
 The server provides the following tool:
 
-- `getWeather`: Get current weather for a location
+- `getWeather`: Get current weather for a location and a given date
   - Arguments:
     - `location`: String (city name or location)
+    - `date`: The date to get weather data for (YYYY-MM-DD)
   - Returns:
-    - `temperature`: Current temperature in Celsius
+    - `date`: date,
+    - `temperature_min`: Minimum temperature in Celsius
+    - `temperature_max`: Maximum temperature in Celsius
     - `conditions`: Weather conditions description
-    - `humidity`: Humidity percentage
-    - `windSpeed`: Wind speed in m/s
+    - `precipitation`: Sum of precipitation for given date
+    - `windSpeed_max`: maximum Wind speed in m/s
 
 ## License
 
