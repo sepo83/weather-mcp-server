@@ -4,9 +4,6 @@
   "description": "MCP Weather Service - A MCP server for weather data using Open Meteo API (forked from @rehmatalisayany/weather-mcp-server)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": {
-    "weather-mcp-server": "./bin/cli.cjs"
-  },
   "type": "module",
   "files": [
     "dist",
