@@ -112,6 +112,7 @@ async function main() {
         };
       }
       const weatherData = await weatherResponse.json() as DailyWeatherData;
+      console.log("Wetter-API Antwort:", JSON.stringify(weatherData, null, 2));
 
       // 4. Das richtige Tages-Array-Element finden
       const idx = weatherData.daily.time.findIndex((d: string) => d === dateStr);
