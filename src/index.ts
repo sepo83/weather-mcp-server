@@ -78,7 +78,7 @@ async function main() {
   "getWeather",
   {
     location: z.string().describe("The location to get weather data for (city name)"),
-    date: z.date().describe("The date to get weather data for (e.g. 2025-05-27)")
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe("The date to get weather data for (YYYY-MM-DD)")
   },
   async ({ location, date }) => {
     try {
