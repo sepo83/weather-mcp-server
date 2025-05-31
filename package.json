@@ -1,7 +1,7 @@
 {
-  "name": "@rehmatalisayany/weather-mcp-server",
+  "name": "@sepo/weather-mcp-server",
   "version": "1.0.6",
-  "description": "MCP Weather Service - A MCP server for weather data using Open Meteo API",
+  "description": "MCP Weather Service - A MCP server for weather data using Open Meteo API (forked from @rehmatalisayany/weather-mcp-server)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -33,10 +33,6 @@
     "type": "git",
     "url": "git+https://github.com/rehmat123/weather-mcp-server.git"
   },
-  "bugs": {
-    "url": "https://github.com/rehmat123/weather-mcp-server/issues"
-  },
-  "homepage": "https://github.com/rehmat123/weather-mcp-server#readme",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1",
