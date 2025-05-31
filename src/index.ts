@@ -106,7 +106,7 @@ async function main() {
       // 3. Wetterdaten holen
       const weatherApiUrl = `${WEATHER_API_URL}?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weather_code&start_date=${dateStr}&end_date=${dateStr}&timezone=auto`;
 
-      console.log("Wetter-API Aufruf:", weatherApiUrl);
+      //console.log("Wetter-API Aufruf:", weatherApiUrl);
 
       const weatherResponse = await fetch(weatherApiUrl);
 
@@ -116,7 +116,7 @@ async function main() {
         };
       }
       const weatherData = await weatherResponse.json() as DailyWeatherData;
-      console.log("Wetter-API Antwort:", JSON.stringify(weatherData, null, 2));
+      //console.log("Wetter-API Antwort:", JSON.stringify(weatherData, null, 2));
 
       // 4. Das richtige Tages-Array-Element finden
       const idx = weatherData.daily.time.findIndex((d: string) => d === dateStr);
