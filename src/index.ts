@@ -103,7 +103,8 @@ async function main() {
       const dateStr = date;
 
       // 3. Wetterdaten holen
-      const weatherApiUrl = `${WEATHER_API_URL}?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_min,temperature_2m_max,rain_sum&start_date=${dateStr}&end_date=${dateStr}&timezone=auto`;
+      const weatherApiUrl = `${WEATHER_API_URL}?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weather_code&start_date=${dateStr}&end_date=${dateStr}&timezone=auto`;
+
       console.log("Wetter-API Aufruf:", weatherApiUrl);
 
       const weatherResponse = await fetch(weatherApiUrl);
@@ -128,11 +129,13 @@ async function main() {
 
       const weatherInfo = {
         date: dateStr,
-        temperature: weatherData.daily.temperature_2m[idx],
-        humidity: weatherData.daily.relative_humidity_2m[idx],
-        windSpeed: weatherData.daily.wind_speed_10m[idx],
-        description: weatherDescription
+        temp_max: weatherData.daily.temperature_2m_max[idx],
+        temp_min: weatherData.daily.temperature_2m_min[idx],
+        precipitation: weatherData.daily.precipitation_sum[idx],
+        windspeed_max: weatherData.daily.windspeed_10m_max[idx],
+        description: getWeatherDescription(weatherData.daily.weather_code[idx])
       };
+
 
       return {
         content: [{
