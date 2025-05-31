@@ -66,9 +66,8 @@ async function main() {
   // Add weather tool using the new syntax
   server.tool(
     "getWeather",
-    { location: z.string().describe("The location to get weather data for (city name)"),
-      date:     z.date().description("The date to get weather data for (e.g. 2025-05-27)")},
-    async ({ location, date }) => {
+    { location: z.string().describe("The location to get weather data for (city name)") },
+    async ({ location }) => {
       try {
         // First, get coordinates for the location
         const geocodingResponse = await fetch(
@@ -92,7 +91,7 @@ async function main() {
 
         // Then, get weather data for those coordinates
         const weatherResponse = await fetch(
-          `${WEATHER_API_URL}?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&start_date=${date}&end_date=${date}`
+          `${WEATHER_API_URL}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`
         );
 
         if (!weatherResponse.ok) {
