@@ -7,7 +7,6 @@
   "bin": {
     "weather-mcp-server": "./dist/index.js"
   },
-  "type": "module",
   "files": [
     "dist",
     "README.md",
