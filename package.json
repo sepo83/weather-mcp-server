@@ -5,6 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "bin": {
+    "weather-mcp-server": "./bin/cli.cjs"
+  },
   "files": [
     "dist",
     "README.md",
