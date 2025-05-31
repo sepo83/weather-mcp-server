@@ -1,6 +1,6 @@
 {
   "name": "@sepo/weather-mcp-server",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "MCP Weather Service - A MCP server for weather data using Open Meteo API (forked from @rehmatalisayany/weather-mcp-server)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
