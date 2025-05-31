@@ -1,13 +1,13 @@
 {
-  "name": "@sepo/weather-mcp-server",
-  "version": "2.0.0",
+  "name": "@sepo83/weather-mcp-server",
+  "version": "1.0.6",
   "description": "MCP Weather Service - A MCP server for weather data using Open Meteo API (forked from @rehmatalisayany/weather-mcp-server)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "bin": {
-    "weather-mcp-server": "./bin/cli.cjs"
+    "weather-mcp-server": "./dist/index.js"
   },
+  "type": "module",
   "files": [
     "dist",
     "README.md",
@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "start": "tsx src/index.ts",
+    "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
     "test": "tsx get-weather.ts",
     "prepublishOnly": "npm run build"
@@ -29,17 +29,12 @@
     "open-meteo"
   ],
   "author": "Rehmat Ali Sayany",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rehmat123/weather-mcp-server.git"
-  },
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1",
     "axios": "^1.6.7",
     "zod": "^3.22.4",
-    "node-fetch": "^3.3.2",
-    "tsx": "^4.7.0"
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
