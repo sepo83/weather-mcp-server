@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "weather-mcp-server": "./dist/index.js"
+    "weather-mcp-server": "./bin/cli.js"
   },
   "type": "module",
   "files": [
