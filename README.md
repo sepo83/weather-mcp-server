@@ -66,6 +66,7 @@ npm build
 
 ```
 ### To run with Docker providing SSE interface
+This uses supergateway (https://github.com/supercorp-ai/supergateway) to convert between stdio and sse.
 ```
   docker build . -t weather-mcp-server
   docker run -p 8000:8000 weather-mcp-server
