@@ -100,7 +100,7 @@ async function main() {
       const { latitude, longitude } = geocodingData.results[0];
 
       // 2. Datum als YYYY-MM-DD-String
-      const dateStr = date instanceof Date ? date.toISOString().split('T')[0] : date;
+      const dateStr = date;
 
       // 3. Wetterdaten holen
       const weatherResponse = await fetch(
