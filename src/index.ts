@@ -19,16 +19,17 @@ interface WeatherData {
     weather_code: number;
   };
 }
+
 interface DailyWeatherData {
   daily: {
     time: string[];
-    temperature_2m: number[];
-    relative_humidity_2m: number[];
-    wind_speed_10m: number[];
+    temperature_2m_max: number[];
+    temperature_2m_min: number[];
+    precipitation_sum: number[];
+    windspeed_10m_max: number[];
     weather_code: number[];
   };
 }
-
 
 // Weather API configuration
 const GEOCODING_API_URL = 'https://geocoding-api.open-meteo.com/v1/search';
