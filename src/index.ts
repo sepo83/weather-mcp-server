@@ -19,6 +19,16 @@ interface WeatherData {
     weather_code: number;
   };
 }
+interface DailyWeatherData {
+  daily: {
+    time: string[];
+    temperature_2m: number[];
+    relative_humidity_2m: number[];
+    wind_speed_10m: number[];
+    weather_code: number[];
+  };
+}
+
 
 // Weather API configuration
 const GEOCODING_API_URL = 'https://geocoding-api.open-meteo.com/v1/search';
@@ -101,7 +111,7 @@ async function main() {
           content: [{ type: "text", text: `Weather API error: ${weatherResponse.statusText}` }]
         };
       }
-      const weatherData = await weatherResponse.json();
+      const weatherData = await weatherResponse.json() as DailyWeatherData;
 
       // 4. Das richtige Tages-Array-Element finden
       const idx = weatherData.daily.time.findIndex((d: string) => d === dateStr);
