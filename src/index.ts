@@ -65,69 +65,80 @@ async function main() {
 
   // Add weather tool using the new syntax
   server.tool(
-    "getWeather",
-    { location: z.string().describe("The location to get weather data for (city name)"),
-      date:     z.date().description("The date to get weather data for (e.g. 2025-05-27)")},
-    async ({ location, date }) => {
-      try {
-        // First, get coordinates for the location
-        const geocodingResponse = await fetch(
-          `${GEOCODING_API_URL}?name=${encodeURIComponent(location)}&count=1`
-        );
-
-        if (!geocodingResponse.ok) {
-          return {
-            content: [{ type: "text", text: `Geocoding API error: ${geocodingResponse.statusText}` }]
-          };
-        }
-
-        const geocodingData = await geocodingResponse.json() as GeocodingResult;
-        if (!geocodingData.results || geocodingData.results.length === 0) {
-          return {
-            content: [{ type: "text", text: "Location not found" }]
-          };
-        }
-
-        const { latitude, longitude } = geocodingData.results[0];
-
-        // Then, get weather data for those coordinates
-        const weatherResponse = await fetch(
-          `${WEATHER_API_URL}?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&start_date=${date}&end_date=${date}`
-        );
-
-        if (!weatherResponse.ok) {
-          return {
-            content: [{ type: "text", text: `Weather API error: ${weatherResponse.statusText}` }]
-          };
-        }
-
-        const weatherData = await weatherResponse.json() as WeatherData;
-        const weatherDescription = getWeatherDescription(weatherData.current.weather_code);
-
-        const weatherInfo = {
-          temperature: weatherData.current.temperature_2m,
-          humidity: weatherData.current.relative_humidity_2m,
-          description: weatherDescription,
-          windSpeed: weatherData.current.wind_speed_10m
-        };
-
+  "getWeather",
+  {
+    location: z.string().describe("The location to get weather data for (city name)"),
+    date: z.date().describe("The date to get weather data for (e.g. 2025-05-27)")
+  },
+  async ({ location, date }) => {
+    try {
+      // 1. Koordinaten holen
+      const geocodingResponse = await fetch(
+        `${GEOCODING_API_URL}?name=${encodeURIComponent(location)}&count=1`
+      );
+      if (!geocodingResponse.ok) {
         return {
-          content: [{
-            type: "text",
-            text: JSON.stringify(weatherInfo, null, 2)
-          }]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        return {
-          content: [{
-            type: "text",
-            text: `Error fetching weather data: ${errorMessage}`
-          }]
+          content: [{ type: "text", text: `Geocoding API error: ${geocodingResponse.statusText}` }]
         };
       }
+      const geocodingData = await geocodingResponse.json() as GeocodingResult;
+      if (!geocodingData.results || geocodingData.results.length === 0) {
+        return {
+          content: [{ type: "text", text: "Location not found" }]
+        };
+      }
+      const { latitude, longitude } = geocodingData.results[0];
+
+      // 2. Datum als YYYY-MM-DD-String
+      const dateStr = date instanceof Date ? date.toISOString().split('T')[0] : date;
+
+      // 3. Wetterdaten holen
+      const weatherResponse = await fetch(
+        `${WEATHER_API_URL}?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&start_date=${dateStr}&end_date=${dateStr}&timezone=auto`
+      );
+      if (!weatherResponse.ok) {
+        return {
+          content: [{ type: "text", text: `Weather API error: ${weatherResponse.statusText}` }]
+        };
+      }
+      const weatherData = await weatherResponse.json();
+
+      // 4. Das richtige Tages-Array-Element finden
+      const idx = weatherData.daily.time.findIndex((d: string) => d === dateStr);
+      if (idx === -1) {
+        return {
+          content: [{ type: "text", text: `No weather data for ${dateStr}` }]
+        };
+      }
+
+      const weatherDescription = getWeatherDescription(weatherData.daily.weather_code[idx]);
+
+      const weatherInfo = {
+        date: dateStr,
+        temperature: weatherData.daily.temperature_2m[idx],
+        humidity: weatherData.daily.relative_humidity_2m[idx],
+        windSpeed: weatherData.daily.wind_speed_10m[idx],
+        description: weatherDescription
+      };
+
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify(weatherInfo, null, 2)
+        }]
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      return {
+        content: [{
+          type: "text",
+          text: `Error fetching weather data: ${errorMessage}`
+        }]
+      };
     }
-  );
+  }
+);
+
 
   // Create and connect the transport
   const transport = new StdioServerTransport();
